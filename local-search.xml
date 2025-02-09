@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>玩KaliNethunter时的那些坑</title>
+    <link href="/2025/02/09/%E7%8E%A9KaliNethunter%E6%97%B6%E7%9A%84%E9%82%A3%E4%BA%9B%E5%9D%91/"/>
+    <url>/2025/02/09/%E7%8E%A9KaliNethunter%E6%97%B6%E7%9A%84%E9%82%A3%E4%BA%9B%E5%9D%91/</url>
+    
+    <content type="html"><![CDATA[<h1 id="内核有关"><a href="#内核有关" class="headerlink" title="内核有关"></a>内核有关</h1><h3 id="1-在加载无线网卡需要的内核模块时出现类似以下报错："><a href="#1-在加载无线网卡需要的内核模块时出现类似以下报错：" class="headerlink" title="1.在加载无线网卡需要的内核模块时出现类似以下报错："></a>1.在加载无线网卡需要的内核模块时出现类似以下报错：</h3><figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs vbnet"><span class="hljs-symbol">rt28001ib:</span> Unknown symbol rt2x001ib_get_ bssidx (err -<span class="hljs-number">2</span>)<br><span class="hljs-symbol">rt2800usb:</span> probe <span class="hljs-keyword">of</span> <span class="hljs-number">1</span>-<span class="hljs-number">1</span>:<span class="hljs-number">1.0</span> failed  <span class="hljs-keyword">with</span> <span class="hljs-keyword">error</span> -<span class="hljs-number">2</span><br>......<br></code></pre></td></tr></table></figure><p>内核打开<strong>CONFIG_MAC80211_RC_MINSTREL</strong>选项即可</p><h3 id="2-在打开CONFIG-MAC80211选项后出现了卡一的情况"><a href="#2-在打开CONFIG-MAC80211选项后出现了卡一的情况" class="headerlink" title="2.在打开CONFIG_MAC80211选项后出现了卡一的情况."></a>2.在打开<strong>CONFIG_MAC80211</strong>选项后出现了卡一的情况.</h3><p>只需要将其设置为<strong>CONFIG_MAC80211&#x3D;m</strong>之后，在进入系统后手动加载即可.<br><br><br>eg:<br><br><br>:&#x2F;data&#x2F;local&#x2F;tmp # insmod mac80211.ko<br><br>insmod: failed to load mac80211.ko: File exists<br><br>1|:&#x2F;data&#x2F;local&#x2F;tmp # rmmod mac80211<br><br>:&#x2F;data&#x2F;local&#x2F;tmp # insmod mac80211.ko<br><br>:&#x2F;data&#x2F;local&#x2F;tmp #<br></p><h3 id="3"><a href="#3" class="headerlink" title="3."></a>3.</h3><h1 id="容器相关"><a href="#容器相关" class="headerlink" title="容器相关"></a>容器相关</h1><h3 id="1-使用git-clone时提示-git-Required-key-not-available"><a href="#1-使用git-clone时提示-git-Required-key-not-available" class="headerlink" title="1.使用git clone时提示.git: Required key not available"></a>1.使用git clone时提示.git: Required key not available</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">nano <span class="hljs-regexp">/data/</span>local<span class="hljs-regexp">/nhsystem/</span>kali-arm64<span class="hljs-regexp">/etc/</span>pam.d/su-l<br></code></pre></td></tr></table></figure><p>将<strong>session optional pam_keyinit.so force revoke</strong>使用#注释掉即可</p><h3 id="2-无法ping通网络，apt-update也无法使用"><a href="#2-无法ping通网络，apt-update也无法使用" class="headerlink" title="2.无法ping通网络，apt update也无法使用"></a>2.无法ping通网络，apt update也无法使用</h3><p>在排除是软件源的问题后还是无法使用，可以使用以下命令来解决</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">groupadd -g 3003 aid_inet<br>usermod -G nogroup -g aid_inet _apt<br></code></pre></td></tr></table></figure><p>备用方案(换DNS)：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;nameserver 8.8.8.8&quot;</span> &gt; /etc/resolv.conf<br></code></pre></td></tr></table></figure><h3 id="3-1"><a href="#3-1" class="headerlink" title="3."></a>3.</h3>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Debian12 on LXC的硬件加速</title>
     <link href="/2025/02/08/Debian12%20on%20LXC%E7%9A%84%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/"/>
     <url>/2025/02/08/Debian12%20on%20LXC%E7%9A%84%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/</url>
